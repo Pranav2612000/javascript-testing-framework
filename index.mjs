@@ -31,15 +31,22 @@ const testFiles = hasteFS.matchFilesWithGlob([
 let hasFailed = false;
 await Promise.all(
   Array.from(testFiles).map(async (testFile) => {
-    const {success, errorMessage} = await worker.runTest(testFile);
+    const {success, testResults, errorMessage} = await worker.runTest(testFile);
     const status = success 
-      ? chalk.green.inverse.bold(' PASS ')
-      : chalk.red.inverse.bold(' FAIL ');
+      ? chalk.green.inverse.bold(" PASS ")
+      : chalk.red.inverse.bold(" FAIL ");
 
-    console.log(status + ' ' + chalk.dim(relative(root, testFile)));
+    console.log(status + " " + chalk.dim(relative(root, testFile)));
     if (!success) {
       hasFailed = true;
-      console.log(' ' + errorMessage);
+      if (testResults) {
+        testResults.filter((result) => result.errors.length)
+        .forEach((result) => console.log(
+          result.testPath.slice(1).join(" ") + "\n" + result.errors[0]
+        ));
+      } else if (errorMessage) {
+        console.log(" " + errorMessage);
+      }
     }
   })
 );
