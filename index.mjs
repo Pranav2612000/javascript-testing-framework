@@ -28,6 +28,7 @@ const testFiles = hasteFS.matchFilesWithGlob([
   process.argv[2] ? `**/${process.argv[2]}*` : "**/*.test.js"
 ]);
 
+let hasFailed = false;
 await Promise.all(
   Array.from(testFiles).map(async (testFile) => {
     const {success, errorMessage} = await worker.runTest(testFile);
@@ -37,9 +38,16 @@ await Promise.all(
 
     console.log(status + ' ' + chalk.dim(relative(root, testFile)));
     if (!success) {
+      hasFailed = true;
       console.log(' ' + errorMessage);
     }
   })
 );
 
 worker.end();
+if (hasFailed) {
+  console.log(
+    "\n" + chalk.red.bold("Test run failed, please fix all failing tests")
+  );
+  process.exitCode = 1;
+}
