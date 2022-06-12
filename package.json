@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "chalk": "^4.1.2",
+    "expect": "^28.1.1",
     "jest-haste-map": "^28.1.1",
     "jest-worker": "^28.1.1"
   }

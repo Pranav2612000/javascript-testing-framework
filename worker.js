@@ -1,4 +1,5 @@
 const fs = require("fs");
+const {expect} = require("expect");
 
 exports.runTest = async function(testFile) {
   const code = await fs.promises.readFile(testFile, "utf8");
@@ -6,16 +7,6 @@ exports.runTest = async function(testFile) {
     success: false,
     errorMessage: null
   };
-
-  const expect = (received) => ({
-    toBe: (expected) => {
-      if (received !== expected) {
-        throw new Error(`Expected ${expected} but received ${received}.`);
-      } else {
-        return true;
-      }
-    }
-  });
 
   try {
     eval(code);
