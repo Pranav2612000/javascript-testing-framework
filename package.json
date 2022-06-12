@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "glob": "^8.0.3",
+    "jest-haste-map": "^28.1.1"
+  }
+}
